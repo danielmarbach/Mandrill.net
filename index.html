@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Mandrill.net : Mandrill api wrapper for .net">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Mandrill.net</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/feinoujc/Mandrill.net">View on GitHub</a>
+
+          <h1 id="project_title">Mandrill.net</h1>
+          <h2 id="project_tagline">Mandrill api wrapper for .net</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/feinoujc/Mandrill.net/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/feinoujc/Mandrill.net/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="mandrillnet" class="anchor" href="#mandrillnet" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mandrill.net</h1>
+
+<p>Mandrill api wrapper for .net</p>
+
+<p><a href="https://travis-ci.org/feinoujc/Mandrill.net"><img src="https://travis-ci.org/feinoujc/Mandrill.net.svg?branch=master" alt="Build Status"></a></p>
+
+<h2>
+<a id="api-docs" class="anchor" href="#api-docs" aria-hidden="true"><span class="octicon octicon-link"></span></a>API Docs</h2>
+
+<p><a href="https://mandrillapp.com/api/docs/">https://mandrillapp.com/api/docs/</a></p>
+
+<h2>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h2>
+
+<div class="highlight highlight-ps"><pre><span class="pl-vo">Install-Package</span> <span class="pl-vo">Mandrill.net</span></pre></div>
+
+<h3>
+<a id="send-a-new-transactional-message-through-mandrill" class="anchor" href="#send-a-new-transactional-message-through-mandrill" aria-hidden="true"><span class="octicon octicon-link"></span></a>Send a new transactional message through Mandrill</h3>
+
+<div class="highlight highlight-cs"><pre><span class="pl-k">var</span> api = <span class="pl-s">new</span> MandrillApi(<span class="pl-s1"><span class="pl-pds">"</span>YOUR_API_KEY_GOES_HERE<span class="pl-pds">"</span></span>);
+<span class="pl-k">var</span> message = <span class="pl-s">new</span> MandrillMessage(<span class="pl-s1"><span class="pl-pds">"</span>from@example.com<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>to@example.com<span class="pl-pds">"</span></span>,
+                <span class="pl-s1"><span class="pl-pds">"</span>hello mandrill!<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>...how are you?<span class="pl-pds">"</span></span>);
+<span class="pl-k">var</span> result = await api.Messages.SendAsync(message);
+<span class="pl-c">//or non-async (all methods have non-async version)</span>
+<span class="pl-c">//var result = api.Messages.Send(message);</span></pre></div>
+
+<h3>
+<a id="send-a-new-transactional-message-through-mandrill-using-a-template" class="anchor" href="#send-a-new-transactional-message-through-mandrill-using-a-template" aria-hidden="true"><span class="octicon octicon-link"></span></a>Send a new transactional message through Mandrill using a template</h3>
+
+<div class="highlight highlight-cs"><pre><span class="pl-k">var</span> api = <span class="pl-s">new</span> MandrillApi(<span class="pl-s1"><span class="pl-pds">"</span>YOUR_API_KEY_GOES_HERE<span class="pl-pds">"</span></span>);
+<span class="pl-k">var</span> message = <span class="pl-s">new</span> MandrillMessage();
+message.AddTo(<span class="pl-s1"><span class="pl-pds">"</span>recipient@example.com<span class="pl-pds">"</span></span>);
+message.ReplyTo = <span class="pl-s1"><span class="pl-pds">"</span>customerservice@acme.com<span class="pl-pds">"</span></span>;
+<span class="pl-c">//supports merge var content as string</span>
+message.AddGlobalMergeVars(<span class="pl-s1"><span class="pl-pds">"</span>invoice_date<span class="pl-pds">"</span></span>, DateTime.Now.ToShortDateString());
+<span class="pl-c">//or as objects (handlebar templates only)</span>
+message.AddRcptMergeVars(<span class="pl-s1"><span class="pl-pds">"</span>recipient@example.com<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>invoice_details<span class="pl-pds">"</span></span>, <span class="pl-s">new</span>[]
+{
+    <span class="pl-s">new</span> Dictionary&lt;<span class="pl-st">string</span>, <span class="pl-st">string</span>&gt;
+    {
+        {<span class="pl-s1"><span class="pl-pds">"</span>sku<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>apples<span class="pl-pds">"</span></span>},
+        {<span class="pl-s1"><span class="pl-pds">"</span>qty<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>4<span class="pl-pds">"</span></span>},
+        {<span class="pl-s1"><span class="pl-pds">"</span>price<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>0.40<span class="pl-pds">"</span></span>}
+    },
+    <span class="pl-s">new</span> Dictionary&lt;<span class="pl-st">string</span>, <span class="pl-st">string</span>&gt;
+    {
+        {<span class="pl-s1"><span class="pl-pds">"</span>sku<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>oranges<span class="pl-pds">"</span></span>},
+        {<span class="pl-s1"><span class="pl-pds">"</span>qty<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>6<span class="pl-pds">"</span></span>},
+        {<span class="pl-s1"><span class="pl-pds">"</span>price<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>0.30<span class="pl-pds">"</span></span>}
+
+    }
+});
+
+<span class="pl-k">var</span> result = api.Messages.SendTemplateAsync(message, <span class="pl-s1"><span class="pl-pds">"</span>customer-invoice<span class="pl-pds">"</span></span>);</pre></div>
+
+<h3>
+<a id="processing-a-web-hook-batch" class="anchor" href="#processing-a-web-hook-batch" aria-hidden="true"><span class="octicon octicon-link"></span></a>Processing a web hook batch</h3>
+
+<div class="highlight highlight-cs"><pre>[HttpPost]
+<span class="pl-s">public</span> IHttpActionResult MyWebApiControllerMethod(FormDataCollection <span class="pl-k">value</span>)
+{
+    <span class="pl-k">var</span> events = MandrillMessageEvent.ParseMandrillEvents(<span class="pl-k">value</span>.Get(<span class="pl-s1"><span class="pl-pds">"</span>mandrill_events<span class="pl-pds">"</span></span>));
+    <span class="pl-k">foreach</span> (<span class="pl-k">var</span> messageEvent <span class="pl-k">in</span> events)
+    {
+        <span class="pl-c">//process the web hook</span>
+    }
+    <span class="pl-k">return</span> Ok();
+}</pre></div>
+
+<h2>
+<a id="api-coverage" class="anchor" href="#api-coverage" aria-hidden="true"><span class="octicon octicon-link"></span></a>API coverage</h2>
+
+<p>See <a href="https://github.com/feinoujc/Mandrill.net/issues/1">this issue</a> to track progress of api implementation</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Mandrill.net maintained by <a href="https://github.com/feinoujc">feinoujc</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
