@@ -1,36 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Mandrill.net : Mandrill api wrapper for .net">
+    <title>Mandrill.net by feinoujc</title>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Mandrill.net</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
-
   <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Mandrill.net</h1>
+        <p class="header">Mandrill api wrapper for .net</p>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/feinoujc/Mandrill.net">View on GitHub</a>
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/feinoujc/Mandrill.net/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/feinoujc/Mandrill.net/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/feinoujc/Mandrill.net">View On GitHub</a></li>
+        </ul>
 
-          <h1 id="project_title">Mandrill.net</h1>
-          <h2 id="project_tagline">Mandrill api wrapper for .net</h2>
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/feinoujc">feinoujc</a></p>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/feinoujc/Mandrill.net/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/feinoujc/Mandrill.net/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
+      </header>
+      <section>
         <h1>
 <a id="mandrillnet" class="anchor" href="#mandrillnet" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mandrill.net</h1>
 
@@ -63,6 +62,7 @@
 
 <div class="highlight highlight-cs"><pre><span class="pl-k">var</span> api = <span class="pl-s">new</span> MandrillApi(<span class="pl-s1"><span class="pl-pds">"</span>YOUR_API_KEY_GOES_HERE<span class="pl-pds">"</span></span>);
 <span class="pl-k">var</span> message = <span class="pl-s">new</span> MandrillMessage();
+message.FromEmail = <span class="pl-s1"><span class="pl-pds">"</span>no-reply@acme.com<span class="pl-pds">"</span></span>;
 message.AddTo(<span class="pl-s1"><span class="pl-pds">"</span>recipient@example.com<span class="pl-pds">"</span></span>);
 message.ReplyTo = <span class="pl-s1"><span class="pl-pds">"</span>customerservice@acme.com<span class="pl-pds">"</span></span>;
 <span class="pl-c">//supports merge var content as string</span>
@@ -85,7 +85,8 @@ message.AddRcptMergeVars(<span class="pl-s1"><span class="pl-pds">"</span>recipi
     }
 });
 
-<span class="pl-k">var</span> result = api.Messages.SendTemplateAsync(message, <span class="pl-s1"><span class="pl-pds">"</span>customer-invoice<span class="pl-pds">"</span></span>);</pre></div>
+<span class="pl-k">var</span> result = await api.Messages.SendTemplateAsync(message, <span class="pl-s1"><span class="pl-pds">"</span>customer-invoice<span class="pl-pds">"</span></span>);
+</pre></div>
 
 <h3>
 <a id="processing-a-web-hook-batch" class="anchor" href="#processing-a-web-hook-batch" aria-hidden="true"><span class="octicon octicon-link"></span></a>Processing a web hook batch</h3>
@@ -93,10 +94,10 @@ message.AddRcptMergeVars(<span class="pl-s1"><span class="pl-pds">"</span>recipi
 <div class="highlight highlight-cs"><pre>[HttpPost]
 <span class="pl-s">public</span> IHttpActionResult MyWebApiControllerMethod(FormDataCollection <span class="pl-k">value</span>)
 {
-    <span class="pl-k">var</span> events = MandrillMessageEvent.ParseMandrillEvents(<span class="pl-k">value</span>.Get(<span class="pl-s1"><span class="pl-pds">"</span>mandrill_events<span class="pl-pds">"</span></span>));
+    <span class="pl-k">var</span> events = MandrillMessageEvent.ParseMandrillEvents((<span class="pl-k">value</span>.Get(<span class="pl-s1"><span class="pl-pds">"</span>mandrill_events<span class="pl-pds">"</span></span>)));
     <span class="pl-k">foreach</span> (<span class="pl-k">var</span> messageEvent <span class="pl-k">in</span> events)
     {
-        <span class="pl-c">//process the web hook</span>
+        <span class="pl-c">//...</span>
     }
     <span class="pl-k">return</span> Ok();
 }</pre></div>
@@ -106,17 +107,11 @@ message.AddRcptMergeVars(<span class="pl-s1"><span class="pl-pds">"</span>recipi
 
 <p>See <a href="https://github.com/feinoujc/Mandrill.net/issues/1">this issue</a> to track progress of api implementation</p>
       </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Mandrill.net maintained by <a href="https://github.com/feinoujc">feinoujc</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
       </footer>
     </div>
-
-    
-
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
   </body>
 </html>
